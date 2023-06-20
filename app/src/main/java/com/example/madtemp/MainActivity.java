@@ -11,16 +11,21 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
+    Boolean updated;
+    Boolean follow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent rec = getIntent();
-        String name = rec.getStringExtra("name");
+        String uname = rec.getStringExtra("uname");
         String des = rec.getStringExtra("des");
-        Boolean follow = rec.getBooleanExtra("fol",false);
+        follow = rec.getBooleanExtra("fol",false);
+        int id = rec.getIntExtra("id",0);
         TextView txt = (TextView) findViewById(R.id.textView);
-        txt.setText(name);
+        txt.setText(uname);
         TextView description = (TextView) findViewById(R.id.textView2);
         description.setText("Description: " + des);
         Button btn = (Button) findViewById(R.id.button);
@@ -33,16 +38,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if (btn.getText() == "UNFOLLOW") {
+                if (follow == true) {
                     btn.setText("FOLLOW");
+                    updated = false;
+                    follow = false;
                     Toast.makeText(getApplicationContext(), "Unfollowed", Toast.LENGTH_SHORT).show();
-
-                } else if (btn.getText() == "FOLLOW") {
+                    dbHandler.updateUser(id,updated);
+                } else if (follow == false) {
                     btn.setText("UNFOLLOW");
+                    updated = true;
+                    follow = true;
                     Toast.makeText(getApplicationContext(), "Followed", Toast.LENGTH_SHORT).show();
-
+                    dbHandler.updateUser(id,updated);
                 }
             }
         });

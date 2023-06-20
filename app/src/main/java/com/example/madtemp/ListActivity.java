@@ -24,11 +24,14 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
 
     Boolean f;
+    int id;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
 
         User person1 = new User("Ben","1231235451",1590762919,true);
         User person2 = new User("John","1231235451",751273111,true);
@@ -50,28 +53,31 @@ public class ListActivity extends AppCompatActivity {
         User person18 = new User("Rin","1231235451",301408204,false);
         User person19 = new User("Tom","1231235451",23019231,true);
         User person20 = new User("Arthur","1231235451",403810312,false);
-        ArrayList<User> userList = new ArrayList<>();
-        userList.add(person1);
-        userList.add(person2);
-        userList.add(person3);
-        userList.add(person4);
-        userList.add(person5);
-        userList.add(person6);
-        userList.add(person7);
-        userList.add(person8);
-        userList.add(person9);
-        userList.add(person10);
-        userList.add(person11);
-        userList.add(person12);
-        userList.add(person13);
-        userList.add(person14);
-        userList.add(person15);
-        userList.add(person16);
-        userList.add(person17);
-        userList.add(person18);
-        userList.add(person19);
-        userList.add(person20);
+        dbHandler.addUser(person1);
+        dbHandler.addUser(person2);
+        dbHandler.addUser(person3);
+        dbHandler.addUser(person4);
+        dbHandler.addUser(person5);
+        dbHandler.addUser(person6);
+        dbHandler.addUser(person7);
+        dbHandler.addUser(person8);
+        dbHandler.addUser(person9);
+        dbHandler.addUser(person10);
+        dbHandler.addUser(person11);
+        dbHandler.addUser(person12);
+        dbHandler.addUser(person13);
+        dbHandler.addUser(person14);
+        dbHandler.addUser(person15);
+        dbHandler.addUser(person16);
+        dbHandler.addUser(person17);
+        dbHandler.addUser(person18);
+        dbHandler.addUser(person19);
+        dbHandler.addUser(person20);
 
+
+
+
+        ArrayList<User> userList = dbHandler.getUser();
 
         RecyclerView rv = findViewById(R.id.recycleview);
         BrandsAdapter mAdapter = new BrandsAdapter(userList);
@@ -94,9 +100,12 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Bundle extras = new Bundle();
-                    extras.putString("name",nametxt.getText().toString());
+                    extras.putString("uname",nametxt.getText().toString());
                     extras.putString("des",destxt.getText().toString());
                     extras.putBoolean("fol",f);
+                    extras.putInt("id",id);
+                    String mes = Boolean.toString(f);
+                    Toast.makeText(getApplicationContext(), mes, Toast.LENGTH_SHORT).show();
                     Intent activityName = new Intent(ListActivity.this, MainActivity.class);
                     activityName.putExtras(extras);
                     startActivity(activityName);
@@ -168,6 +177,8 @@ public class ListActivity extends AppCompatActivity {
                     viewHolder0.nametxt.setText(u.getName() + " " +  u.getId());
                     viewHolder0.destxt.setText(u.getDescription());
                     f = u.getFollowed();
+                    id = u.getId();
+                    name = u.getName();
                     break;
 
                 default:
@@ -175,7 +186,8 @@ public class ListActivity extends AppCompatActivity {
                     viewHolder2.nametxt.setText(u.getName() + " " +  u.getId());
                     viewHolder2.destxt.setText(u.getDescription());
                     f = u.getFollowed();
-
+                    id = u.getId();
+                    name = u.getName();
                     break;
             }
         }
